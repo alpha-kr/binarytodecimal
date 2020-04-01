@@ -1,3 +1,5 @@
+import 'package:binario/teclado1.dart';
+import 'package:binario/teclado2.dart';
 import 'package:flutter/material.dart';
 void main()=>runApp( MaterialApp(
   title: "BinarytoDecimal",
@@ -12,84 +14,75 @@ class binarytoDecimal extends StatefulWidget {
 }
 
 class _binarytoDecimalState extends State<binarytoDecimal> {
-   String _binary='0';
-    String _decimal='0';
+ 
+  
+   String d1='0';
+   String d2='0';
+   String t="binary->decimal";
+   int sw=0;
+   Widget teclado;
+  
+    
+    
+   
   @override
   Widget build(BuildContext context) {
-   
-    void addbit({String bit }){
-        setState(() {
-          if (_binary=='0') {
-            _binary=bit;
-          }else{
-            _binary+=bit;
-          }
-          int dec=int.parse(_binary,radix: 2);
-          _decimal="$dec";
-        });
+     
+    
+    void escribir( String numero){
+      setState(() {
+         if (sw==0) {
+       d1+=numero;
+       d2=int.parse(d1,radix: 2).toRadixString(10);
+       
+     }else{
+       d1+=numero;
+       d2=int.parse(d1,radix: 10).toRadixString(2);
 
 
-    }
+     }
+      });
+    
+     
+   }
+    
     void clear(){
       setState(() {
-        _decimal='0';
-      _binary='0';
+        d1='0';
+      d2='0';
       });
       
+    }
+    void cambio(){
+
+      setState(() {
+         d1='0';
+      d2='0';
+        if (sw==0) {
+          t="Decimal->binario";
+          sw=1;
+          
+        }else{
+        t="binary->decimal";
+          sw=0;
+          
+        }
+      });
     }
     return  Container(
       margin: EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
-          Container(alignment: Alignment.topLeft, child: Text("binary->decimal"),),
-          Container(alignment: Alignment.topRight, child: Text(_binary ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30 ,color: Color(0xFFFF5722)), ),),
-          Container(alignment: Alignment.topRight, child: Text(_decimal, style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30 ,color: Color(0xFFFF5722))),),
-          Expanded(
-            flex: 2,
-            child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            
-            children: <Widget>[ 
-
-                   Expanded(
-                 flex: 3,
-                child:GestureDetector(
-                  onTap:(){ addbit(bit: '0');},
-                  child: Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(10),
-              
-                child: Text("0", style: TextStyle(fontSize:30, color: Colors.white ,fontWeight: FontWeight.bold),),
-               color: Colors.blueAccent,
-                  
-              ) 
-          ,
-               
-                ) 
-                  
-                 ),
-              Spacer(),
-              Expanded(
-                 flex: 3,
-                child:GestureDetector(
-                  onTap:(){ addbit(bit: '1');},
-                  child: Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(10),
-              
-                child: Text("1", style: TextStyle(fontSize:30, color: Colors.white ,fontWeight: FontWeight.bold),),
-               color: Colors.blueAccent,
-                  
-              ) 
-          ,
-               
-                ) 
-                  
-                 )
-               
-            ],
-          )
+          GestureDetector(
+            child:Container(alignment: Alignment.topLeft, child: Text(t),) ,
+            onTap:(){
+              cambio();
+            } ,
           ),
+          
+          Container(alignment: Alignment.topRight, child: Text(d1 ,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30 ,color: Color(0xFFFF5722)), ),),
+          Container(alignment: Alignment.topRight, child: Text(d2, style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30 ,color: Color(0xFFFF5722))),),
+          sw==0? Teclado2(escribir):Teclado1(escribir),
           Expanded(
             child: GestureDetector(
               onTap: (){
